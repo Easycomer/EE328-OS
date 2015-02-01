@@ -1,0 +1,38 @@
+Description
+Create a class named Countdown that uses an explicit Thread (don't use the Timer class for this homework) to write a countdown to the console, one number per second. You can either extend Thread or implement Runnable. Your solution is free to implement other classes, but main() should be in Countdown. 
+The program will not actually exit until the user hits the enter key. If the user hits the enter key before the countdown has finished, the program should print interrupted and stop immediately. See transcripts below: 
+java Countdown
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+user hits the Enter key
+finished
+java Countdown
+10
+9
+8
+7
+6
+5
+4
+user hits the Enter key
+
+interrupted
+finished
+Notes: 
+•	The program should exit on exceptions 
+•	Don't use System.exit() to stop your program when the user hits Enter (although you can put it in your Exception handlers) 
+•	the readLine() and sleep() methods will be useful 
+•	If you have any questions, send me an e-mail. You can also check out the Java tutorial on Threads. 
+　 
+Extra clarification/hint
+Since we are not using System.exit( ), then a stoppable thread should check a boolean variable each time it goes around its loop to see if it should continue. 
+To stop the thread, one just sets the variable, and the loop will stop itself. Note that the thing stopping the thread will need a reference to the stoppable thread object. Also, the stoppable thread object must provide some public method for setting the value of the "should-I-continue" variable.

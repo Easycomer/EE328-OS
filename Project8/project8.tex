@@ -1,0 +1,181 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University/School Laboratory Report
+% LaTeX Template
+% Version 3.0 (4/2/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Linux and Unix Users Group at Virginia Tech Wiki
+% (https://vtluug.org/wiki/Example_LaTeX_chem_lab_report)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+\usepackage{lipsum} % Package to generate dummy text throughout this template
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+%\linespread{1.5} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+\usepackage{float} % Required for tables and figures in the multi-column environment - they need to be placed in specific locations with the [H] (e.g. \begin{table}[H])
+
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+\usepackage{paralist} % Used for the compactitem environment which makes bullet points with less space between them
+
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+\fancyhead[C]{Operating System, Spring 2013} % Custom header text
+\fancyfoot[RO]{\thepage} % Custom footer text
+
+\usepackage{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} command for typesetting SI units
+
+\usepackage{graphicx} % Required for the inclusion of images
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}}
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+
+%\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%\usepackage{times} % Uncomment to use the Times New Roman font
+
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Project 8 \\ Matrix Multiplication\thanks{Designed by \LaTeX}} % Title
+
+\author{Jiashuo \textsc{Wang} \\ 5100309436} % Author name
+
+\date{\today} % Date for the report
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+\thispagestyle{fancy} % All pages have headers and footers
+
+\begin{center}
+\begin{tabular}{l r}
+Instructor: & Ling Gong % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+%\fontsize{12pt}{13pt}\selectfont
+
+% If you wish to include an abstract, uncomment the lines below
+% \begin{abstract}
+% Abstract text
+% \end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Objective}
+
+Write a program that calculates the matrix multiplication with all the situation considering. You can see the detail in the end of chapter 4 of \emph{OPERATING SYSTEM CONCEPTS WITH JAVA(Seventh Edition)}, page 162.
+
+
+% If you have more than one objective, uncomment the below:
+%\begin{description}
+%\item[First Objective] \hfill \\
+%Objective 1 text
+%\item[Second Objective] \hfill \\
+%Objective 2 text
+%\end{description}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Algorithm}
+
+\subsection{Matrix Multiplication}
+For two matrixes to multiple, the number of column of the first matrix should be equal to that of row of the second matrix. That is to say, the multiplication can occur when they are like $[A]_{m\times n}\times[B]_{n\times q}$.
+
+The multiplication rule can be described as follows:
+\begin{equation}
+\left[
+  \begin{array}{cccc}
+    a_{11} & a_{12} & \cdots & a_{1n}\\
+    a_{21} & a_{22} & \cdots & a_{2n}\\
+    \vdots & \vdots & \ddots & \vdots\\
+    a_{m1} & a_{m2} & \cdots & a_{mn}
+  \end{array}
+\right]
+\times
+\left[
+  \begin{array}{cccc}
+    b_{11} & b_{12} & \cdots & b_{1q}\\
+    b_{21} & b_{22} & \cdots & b_{2q}\\
+    \vdots & \vdots & \ddots & \vdots\\
+    b_{n1} & b_{n2} & \cdots & b_{nq}
+  \end{array}
+\right]
+=
+\left[
+  \begin{array}{cccc}
+    c_{11} & c_{12} & \cdots & c_{1q}\\
+    c_{21} & c_{22} & \cdots & c_{2q}\\
+    \vdots & \vdots & \ddots & \vdots\\
+    c_{m1} & c_{m2} & \cdots & c_{mq}
+  \end{array}
+\right]
+\end{equation}
+where
+\begin{equation}
+c_{ij} = \sum_{r=1}^{n} a_{ir}b_{rj} = a_{i1}b_{1j} + a_{i2}b_{2j} + \cdots + a_{in}b_{nj}\ ,\ i=1,\ 2,\ \cdots,\ m\ ;\ j=1,\ 2,\ \cdots,\ q
+\end{equation}
+\subsection{Multi-thread}
+In each thread, they will execute to calculate one element of Matrix C with the above formula. That is to say, there will exist $m\times q$ threads. And after all the sub-thread have been terminated, the main thread will output the result. To implement it, \emph{join()} is needed and each the \emph{CalMatrix} class should extend \emph{Thread} and overload the \emph{run()}.
+\subsection{More details}
+To input the matrix, several rules to check the input is important, which will make sure the program will execute normally. So I add many check sections in my program. I think it will be full of consideration.
+
+To get the result, I keep two decimal places as default, which uses \emph{DecimalFormat} in \emph{java.text.DecimalFormat}.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Results and Conclusions}
+\subsection{Environment}
+\begin{compactitem}
+\item Windows 8
+\item NetBeans IDE 7.3
+\end{compactitem}
+\subsection{Manual}
+When we start the program, the first is to input the number of row and column of the first matrix. Then we have to input the matrix. For one row, the numbers have to be divided by " ", while for the next row, you have to input the \textbf{ENTER button}! The next is to input the second matrix like the first one. And the result will show to you.
+\subsection{Screenshots of the result}
+Use JVM to compile and execute the program in Figure 1.
+\begin{figure}[h]
+\centering
+\includegraphics[height=9cm]{1.eps}
+\caption{Screenshots of Matrix Multiplication}
+\end{figure}
+
+\subsection{Thoughts}
+JAVA multi-thread is very useful.
+
+%----------------------------------------------------------------------------------------
+
+
+\end{document}

@@ -1,0 +1,27 @@
+Homework 1, Due
+Problem 2.
+Description
+This problem is much more flexible, any reasonable implementation is acceptable. Please implement a class called MyDate which can represent a date. The class should have at least three int fields: year, month, day, and several methods to handle them.  Please make sure the values set to these fields are all valid. Pay attention to the special cases: some month can only 28/29 days, and some month can have 31 days. 
+
+Other the basic methods, there are two additional required methods:
+
+laterThan(MyDate date)
+
+      This method decides whether I am a later date than the passed-in parameter date, and return true or false. For example, if A is a MyDate object representing date 9/15/2004, and B representing date 9/22/2004, A.laterThan(B) should return false, while B.laterThan(A) should return true, and A.laterThan(A) should also return false.
+
+　
+
+dayDifference(MyDate date1, MyDate date2)
+
+     This method should be a static method. It takes two dates and returns an integer indicating how many days are there between them. For example, the days between 9/15/2004 and 9/22/2004 is 7.  date2 shouldn't have to be larger (later) than date1, and you need to judge it yourself. 
+    Hint: you may try use previous method inside this method.
+
+　
+
+To test the code, you can write you own main() function, or any other Class you want to. You can do console input, or hard-code the date creation inside your code is also fine here. The purpose of this assignment is just let you get familiar with class definition and manipulate with objects. 
+
+Points
+10 pts: Correct format of class definition, and can get compiled 
+10 pts: Complete validity check 
+20 pts: The two required methods are properly defined, and can return correct result 
+10 pts: For readability, proper comment, and any extra work you do. 

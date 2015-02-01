@@ -1,0 +1,189 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University/School Laboratory Report
+% LaTeX Template
+% Version 3.0 (4/2/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Linux and Unix Users Group at Virginia Tech Wiki
+% (https://vtluug.org/wiki/Example_LaTeX_chem_lab_report)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+\usepackage{lipsum} % Package to generate dummy text throughout this template
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+%\linespread{1.5} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+\usepackage{float} % Required for tables and figures in the multi-column environment - they need to be placed in specific locations with the [H] (e.g. \begin{table}[H])
+
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+\usepackage{paralist} % Used for the compactitem environment which makes bullet points with less space between them
+
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+\fancyhead[C]{Operating System, Spring 2013} % Custom header text
+\fancyfoot[RO]{\thepage} % Custom footer text
+
+\usepackage{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} command for typesetting SI units
+
+\usepackage{graphicx} % Required for the inclusion of images
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}}
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+
+%\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%\usepackage{times} % Uncomment to use the Times New Roman font
+
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Project 4-1 \\ Socket NetWork\thanks{Designed by \LaTeX}} % Title
+
+\author{Jiashuo \textsc{Wang} \\ 5100309436} % Author name
+
+\date{\today} % Date for the report
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+\thispagestyle{fancy} % All pages have headers and footers
+
+\begin{center}
+\begin{tabular}{l r}
+Instructor: & Ling Gong % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+%\fontsize{12pt}{13pt}\selectfont
+
+% If you wish to include an abstract, uncomment the lines below
+% \begin{abstract}
+% Abstract text
+% \end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Objective}
+
+Write a pair of programs that will communicate over a socket, one called $AddClient$ and one called $AddServer$. $AddServer$ takes one command-line parameter, the port it should listen on. $AddClient$ takes three command-line parameters: the address of the server, the port of the server and a string to send to the server.
+Each run of $AddClient$ will send one string to the server.
+
+$AddServer$ repeatedly listens for Strings from clients. When it hears one, it attempts to convert it to an int and add it to its counter (initially 0). If the conversion fails, it just waits for the next connection. If the received String equals "exit", $AddServer$ prints the value of counter to the screen and exits.
+
+Both programs can exit on errors (cleanly, with a message), but $AddServer$ must tolerate $NumberFormatExceptions$ (use try-catch block to handle it).
+
+Format of addresses and ports:
+
+The server will listen to a particular port on the machine where it's running. The client must connect to that port and machine combination. Thus, to test client and server, you need two command windows (if you're running on a local windows PC) or two separate terminal sessions to a remote machine (e.g. $cunix$).
+If you are working on a local PC, and thus both client and server will running on the same machine, you can use "$localhost$" as the address or the IP address of that machine. Choose any random port number in the range 1025-65535, for example, 2222. Then you can run the programs with java $AddServer$ 2222 and then java $AddClient$ $localhost$ 2222
+If you are working on $cunix$, find the name of the machine where the server will run with the command $uname -n$. This may be, e.g. "walnut". So the sequence will be:
+
+>uname -n
+
+walnut
+
+>java AddServer 2222
+
+Then, in the other command window
+
+>java AddClient walnut 2222
+
+Or you can use $ifconfig$ to find out the IP address of your machine, then replace "walnut" by the IP address.
+
+% If you have more than one objective, uncomment the below:
+%\begin{description}
+%\item[First Objective] \hfill \\
+%Objective 1 text
+%\item[Second Objective] \hfill \\
+%Objective 2 text
+%\end{description}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Algorithm}
+
+\subsection{Two programs}
+There are two programs working together, $AddServer$, $AddClient$.
+\begin{compactitem}
+\item \textbf{AddClient}
+
+This program is used to imitate the client sending messages to the server. The main method should have three parameters, which stand for server address, server port, a string to send to the server respectively. As I work on a local PC, and thus both client and server will running on the same machine, server address will be replaced by "$localhost$". And the server port should be larger than 1024 because host number from 0 to 1024 is used for the OS. And only if the host numbers between $AddServer$ and $AddClient$ are the same can the communication be founded successfully. Besides, according to the rule, the sending string should be numbers, or the sending message will be ignored. That is to say, the server is like a addition machine.
+
+The class $Socket$ is important here and it offers lots of useful method to deal with the problems of socket communication.
+
+\item \textbf{AddServer}
+
+This program is used to imitate the server receiving messages from the clients. The main method have only one parameter, server port, which must be the same with the information in client program. The class $ServerSocket$ is used here to try to receive the messages.
+
+$AddServer$ repeatedly listens for Strings from clients. So a while-statement is needed. And in every loop a $Server$ object will be created to build a connection between clients and server. As soon as the server get the message, the server program will move on and if the message is number, the counter will be increase. If the message is not number, an exception will be called and it will continue into the next loop to wait for the next message from clients.
+
+\end{compactitem}
+
+\subsection{More details}
+During the communication, several errors will happen. Sometimes it should cause the program to exit, sometimes, however, it should not be, especially for server. So $try-catch$ statement is important to decide which error should result in the exit and which should not.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Results and Conclusions}
+\subsection{Environment}
+\begin{compactitem}
+\item Windows 8
+\item NetBeans IDE 7.3
+\end{compactitem}
+\subsection{Steps}
+\begin{compactitem}
+\item Open the first $cmd$ to start the server by using "java AddServer 2000".
+\item Then open the second $cmd$ to start the client to send message by using like "java AddClient localhost 2000 12", and the first $cmd$ will print "Roger!" and counter will increase. But if the client use "java AddClient localhost 2000 a", the first $cmd$ will print "Error!" and counter will stay the same.
+\item After sending, the $AddClient$ will exit, but the $AddServer$ will keep working. Then repeat the second step to continue to send numbers.
+\item When you want the server to exit and get the final answer, you can use "java AddClient localhost 2000 exit" in the second $cmd$ and the value of counter will be printed in the first $cmd$.
+\end{compactitem}
+\subsection{Screenshots of the result}
+Use Command Line to compile and execute the program in Figure 1 and Figure 2.
+
+\subsection{Thoughts}
+As a student of EE, I think this programing skill is quite useful, and by the way, it is interesting to insult knowledge about Java in network.
+\begin{figure}[h]
+\centering
+\includegraphics[height=4cm]{1.eps}
+\caption{Screenshots of AddClient}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[height=4cm]{2.eps}
+\caption{Screenshots of AddServer}
+\end{figure}
+%----------------------------------------------------------------------------------------
+
+
+\end{document}

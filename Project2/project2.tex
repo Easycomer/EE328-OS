@@ -1,0 +1,183 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University/School Laboratory Report
+% LaTeX Template
+% Version 3.0 (4/2/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Linux and Unix Users Group at Virginia Tech Wiki
+% (https://vtluug.org/wiki/Example_LaTeX_chem_lab_report)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+\usepackage{lipsum} % Package to generate dummy text throughout this template
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+%\linespread{1.5} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+\usepackage{float} % Required for tables and figures in the multi-column environment - they need to be placed in specific locations with the [H] (e.g. \begin{table}[H])
+
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+\usepackage{paralist} % Used for the compactitem environment which makes bullet points with less space between them
+
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+\fancyhead[C]{Operating System, Spring 2013} % Custom header text
+\fancyfoot[RO]{\thepage} % Custom footer text
+
+\usepackage{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} command for typesetting SI units
+
+\usepackage{graphicx} % Required for the inclusion of images
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}}
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+
+%\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%\usepackage{times} % Uncomment to use the Times New Roman font
+
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Project 2 \\ Bank Accounts\thanks{Designed by \LaTeX}} % Title
+
+\author{Jiashuo \textsc{Wang} \\ 5100309436} % Author name
+
+\date{\today} % Date for the report
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+\thispagestyle{fancy} % All pages have headers and footers
+
+\begin{center}
+\begin{tabular}{l r}
+Instructor: & Ling Gong % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+%\fontsize{12pt}{13pt}\selectfont
+
+% If you wish to include an abstract, uncomment the lines below
+% \begin{abstract}
+% Abstract text
+% \end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Objective}
+
+Suppose you are opening your own tiny bank, and want to manage the bank accounts in your bank. In your bank, there are only two kinds of account: checking and saving. Both of them should have an account number, and should be able to perform deposit, withdraw and check balance operations. People can open a new account with some money deposited, or no money at all. Checking account and saving account perform differently in some aspects, and there are some requirement to meet about the bank accounts:
+
+Checking account need a minimum balance of \$50 to avoid the monthly fee \$2.
+Saving account can have at most three transactions (deposit or withdraw) in a month, otherwise there will be monthly fee \$5.
+Saving account has no minimum balance requirement, and checking account has no transaction times limit.
+The monthly fee is based on the balance at the end of a month. That means you can avoid the fee by putting some money in your checking account just the day before the end of month.
+At the end of each month, saving account can have some interest. The default interest rate is 5\% for a month ( wow, I wish my citibank can have so high interest rate!) , and based on the ending balance of that month. The interest computation is before any monthly fee deduction (I'm nice again).
+Adding the interest and deducting monthly fee are not considered as a transaction. They are internal thing.
+The interest computation and monthly deduction can only happen at the end of a month
+You don't need to consider when is the end of a month. Whenever you call endMonth(...), that means we are at the end of a month now.
+Finally, there is a requirement about the account number. No two accounts, no matter checking or saving, can have the same account number. And the account number should keep increasing when you create a new account. Even some account get closed, the account number cannot be reused.  Hint* see below.
+
+You can add your own to make your own little bank more complete. Also, the test code doesn't cover every requirement I listed above. So, please don't use it as a fully judgment. You'd better write some test code yourself to fully test your implementation.
+
+One more thing requirement is: the bank ONLY allows checking or saving account! ( This means ...... If you can't get it, email me. :-) )
+
+% If you have more than one objective, uncomment the below:
+%\begin{description}
+%\item[First Objective] \hfill \\
+%Objective 1 text
+%\item[Second Objective] \hfill \\
+%Objective 2 text
+%\end{description}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Algorithm}
+
+\subsection{Accounts}
+There are three different classes about accounts here, $BankAccount$, $SavingAccount$, $CheckingAccount$. $SavingAccount$ and $CheckingAccount$ are extended from $BankAccount$.
+\begin{compactitem}
+\item \textbf{BankAccount}
+
+It fulfils some basic functions. It can help to make an account number for each user, which is private. It can store the balance of each user, which is public. And it defines some basic abstract methods, deposit, withdraw or end-of-month, to be implement in the extended classes.
+
+\item \textbf{SavingAccount}
+
+It extends from the $BankAccount$, which means it implement the undone methods defined in the $BankAccount$ according to the rule.
+\item \textbf{CheckingAccount}
+
+It also extends form the $BankAccount$. The differences from the $SavingAccount$ are the end-of-month operation and little changes in deposit and withdraw.
+\end{compactitem}
+
+\subsection{What's New}
+After doing the basic task, I think more about this bank system. However, it looks more like a paper than a robot that can interact with the users. So I add some functions in it, which will make it better. As I am a new Java programmer, I will add some visual interface later.
+\begin{compactitem}
+\item When withdrawing from a $CheckingAccount$, you have to think more because there is a rule here, Checking account need a minimum balance of \$50 to avoid the monthly fee \$2. So for example, if the balance of the account is only \$38, one should not withdraw \$38 or \$37 because the balance will be minus after the end of the month. So I add a If statement to judge this kind of situation. That is to say, if the balance is only \$38, one can withdraw \$36 at most. So is the saving account when considering about the transaction.
+
+\item The command line for bank system need to be comprehensive. So I make a big change to it by adding some interaction. People can choose to deposit or withdraw, and when the user stop the operation to return the previous menu, I define that it will be the end of month because it is not clear as there's no clock in the system. You can see the interface in the screenshot of the result.
+
+\item Considering that the money can only have up to two decimal places, I use the round-off to print the money in a better form by using the class $BigDecimal$ and method $setScale$, which is in the java.math.*.
+
+\end{compactitem}
+
+\subsection{More details}
+The format of the input of money need to be considered, which should has up to two decimal places. And the choose of menu should also be considered. All of these can be solved by the method, $matches$, which was shown by our TA last Friday.
+It's quite a easy way to do so.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Results and Conclusions}
+\subsection{Environment}
+\begin{compactitem}
+\item Windows 8
+\item NetBeans IDE 7.3
+\end{compactitem}
+\subsection{Screenshots of the result}
+Use Command Line to compile and execute the program in Figure 1 and Figure 2.
+
+\subsection{Thoughts}
+Thinking more to add some new functions is interesting!
+\begin{figure}[h]
+\centering
+\includegraphics[height=12cm]{1.eps}
+\caption{Screenshots of Bank Accounts(1)}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[height=12cm]{2.eps}
+\caption{Screenshots of Bank Accounts(2)}
+\end{figure}
+%----------------------------------------------------------------------------------------
+
+
+\end{document}
